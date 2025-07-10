@@ -1,12 +1,19 @@
-class Usuario:
-    def __init__(self, user_id, name, email):
-        self.id = user_id
-        self.name = name
-        self.email = email
+# src/models/usuario.py
+from src import db
 
-    def get_user_info(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email
-        }
+
+class Usuario(db.Model):
+    __tablename__ = "usuario"
+
+    alias = db.Column(db.String, primary_key=True)
+    nombre = db.Column(db.String, nullable=False)
+
+    # hacia asignaciones
+    asignaciones = db.relationship(
+        "Asignacion",
+        back_populates="usuario",
+        cascade="all, delete-orphan",
+    )
+
+    def __repr__(self):
+        return f"<Usuario {self.alias}>"
